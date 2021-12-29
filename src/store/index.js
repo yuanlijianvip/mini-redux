@@ -4,7 +4,7 @@
  * @Author: yuanlijian
  * @Date: 2021-12-29 10:19:50
  * @LastEditors: yuanlijian
- * @LastEditTime: 2021-12-29 10:31:55
+ * @LastEditTime: 2021-12-29 14:08:35
  */
 
 import * as actionTypes from './action-types';
@@ -19,9 +19,9 @@ import { createStore } from '../redux';
  */
 function reducer(state = { number: 0 }, action) {
     switch (action.type) {
-        case actionTypes.ADD:
+        case actionTypes.ADD1:
             return { number: state.number + 1 };
-        case actionTypes.MINUS:
+        case actionTypes.MINUS1:
             return { number: state.number - 1 };
         default: 
             return state;
