@@ -8,25 +8,38 @@
  */
 
 import React from 'react';
-import store from '../store';
-import { bindActionCreators } from '../redux';
-import actionCreators from '../store/actionCreators/counter2';
-
-const boundActions = bindActionCreators(actionCreators, store.dispatch);
-function Counter2() {
-    let [state, setState] = React.useState(store.getState().counter2);
-    React.useEffect(() => {
-        return store.subscribe(() => {
-            setState(store.getState().counter2);
-        });
-    }, []);
+import actionCreators from '../store/actionCreators/counter1';
+import { connect } from 'react-redux';
+class ClassCounter2 extends React.Components {
+  
+  render() {
     return (
-        <div>
-            <p>{state.number}</p>
-            <button onClick={boundActions.add2}>+</button>
-            <button onClick={boundActions.minus2}>-</button>
-        </div>
+      <div>
+        <p>{this.props.number}</p>
+        <button onClick={this.props.add2}>+</button>
+        <button onClick={this.props.minus2}>-</button>
+      </div>
     )
+  }
 }
+//把仓库中的状态映射为此组件的属性对象
+const mapStateToProps = (state) => state.counter2;
+export default connect(mapStateToProps, actionCreators)(ClassCounter2);
 
-export default Counter2;
+// function Counter2() {
+//     let [state, setState] = React.useState(store.getState().counter2);
+//     React.useEffect(() => {
+//         return store.subscribe(() => {
+//             setState(store.getState().counter2);
+//         });
+//     }, []);
+//     return (
+//         <div>
+//             <p>{state.number}</p>
+//             <button onClick={boundActions.add2}>+</button>
+//             <button onClick={boundActions.minus2}>-</button>
+//         </div>
+//     )
+// }
+
+// export default Counter2;

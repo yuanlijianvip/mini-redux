@@ -8,28 +8,36 @@
  */
 
 import React from 'react';
-import store from '../store';
-import { bindActionCreators } from '../redux';
 import actionCreators from '../store/actionCreators/counter1';
-
-const boundActions = bindActionCreators(actionCreators, store.dispatch);
-function Counter1() {
-    let [state, setState] = React.useState(store.getState().counter1);
-    React.useEffect(() => {
-        return store.subscribe(() => {
-            setState(store.getState().counter1);
-        });
-    }, []);
+import { connect } from 'react-redux';
+class ClassCounter1 extends React.Components {
+  
+  render() {
     return (
-        <div>
-            <p>{state.number}</p>
-            <button onClick={boundActions.add1}>+</button>
-            <button onClick={boundActions.minus1}>-</button>
-        </div>
+      <div>
+        <p>{this.props.number}</p>
+        <button onClick={this.props.add1}>+</button>
+        <button onClick={this.props.minus1}>-</button>
+      </div>
     )
+  }
 }
+//把仓库中的状态映射为此组件的属性对象
+const mapStateToProps = (state) => state.counter1;
+export default connect(mapStateToProps, actionCreators)(ClassCounter1);
 
-export default Counter1;
+// function Counter1() {
+  
+//     return (
+//         <div>
+//             <p>{state.number}</p>
+//             <button onClick={boundActions.add1}>+</button>
+//             <button onClick={boundActions.minus1}>-</button>
+//         </div>
+//     )
+// }
+
+// export default Counter1;
 
 /**
  * 组件和仓库有两种关系
