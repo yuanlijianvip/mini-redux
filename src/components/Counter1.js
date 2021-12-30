@@ -14,10 +14,10 @@ import actionCreators from '../store/actionCreators/counter1';
 
 const boundActions = bindActionCreators(actionCreators, store.dispatch);
 function Counter1() {
-    let [state, setState] = React.useState(store.getState());
+    let [state, setState] = React.useState(store.getState().counter1);
     React.useEffect(() => {
         return store.subscribe(() => {
-            setState(store.getState());
+            setState(store.getState().counter1);
         });
     }, []);
     return (
