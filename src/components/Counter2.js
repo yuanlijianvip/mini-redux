@@ -4,14 +4,13 @@
  * @Author: yuanlijian
  * @Date: 2021-12-29 10:18:48
  * @LastEditors: yuanlijian
- * @LastEditTime: 2021-12-29 14:18:10
+ * @LastEditTime: 2021-12-31 10:06:41
  */
 
 import React from 'react';
-import actionCreators from '../store/actionCreators/counter1';
-import { connect } from 'react-redux';
-class ClassCounter2 extends React.Components {
-  
+import actionCreators from '../store/actionCreators/counter2';
+import { connect } from '../react-redux';
+class ClassCounter2 extends React.Component {
   render() {
     return (
       <div>
