@@ -4,7 +4,7 @@
  * @Author: yuanlijian
  * @Date: 2021-12-31 09:31:36
  * @LastEditors: yuanlijian
- * @LastEditTime: 2021-12-31 10:18:36
+ * @LastEditTime: 2021-12-31 12:28:03
  */
 
 import React from "react";
@@ -19,38 +19,29 @@ import { bindActionCreators } from "../redux";
  * @return {*}
  */
 function connect(mapStateToProps, mapDispatchToProps) {
-  return function (OldComponent) {
-    return class extends React.Component {
-      static contextType = ReactReduxContext;
-      constructor(props, context) {
-        super(props);
-        const store = context.store;
-        this.state = mapStateToProps(store.getState());
-        this.dispatchProps = bindActionCreators(mapDispatchToProps, store.dispatch);
-      }
-
-      componentDidMount () {
-        let store = this.context.store;
-        this.unsubscribe = store.subscribe(() => {
-            this.setState(mapStateToProps(store.getState()));
-        })
-      }
-
-      componentWillUnmount() {
-        this.unsubscribe();
-      }
-
-      render() {
-        return (
-          <OldComponent
-            {...this.props}
-            {...this.state}
-            {...this.dispatchProps}
-          />
-        );
-      }
-    };
-  };
+    return function (OldComponent) {
+        return function (props) {
+            const { store } = React.useContext(ReactReduxContext);
+            const { getState, dispatch, subscribe } = store;
+            const prevState = getState();
+            const stateProps = React.useMemo(() => mapStateToProps(prevState), [prevState]);
+            const dispatchProps = React.useMemo(() => {
+                //mapDispatchToProps有多种写法，常见有三种
+                if (typeof mapDispatchToProps === 'function') {
+                    return mapDispatchToProps(dispatch);
+                } else if (typeof mapDispatchToProps === 'object' && mapDispatchToProps !== null) {
+                    return bindActionCreators(mapDispatchToProps, dispatch);
+                } else { // null undefined
+                    return { dispatch };
+                }
+            }, [store.dispatch]);
+            const [,forceUpdate] = React.useReducer(x => x + 1, 0);
+            React.useLayoutEffect(() => {
+                return subscribe(forceUpdate);
+            }, [subscribe]);
+            return <OldComponent {...props} {...stateProps} {...dispatchProps}/>
+        }
+    }
 }
 
 export default connect;
